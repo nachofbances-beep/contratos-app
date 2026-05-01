@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador de Contratos</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 720px;
+           margin: 40px auto; padding: 0 20px; color: #222; }
+    h1 { color: #1a3a6c; }
+    .modelo { border: 1px solid #ddd; border-radius: 8px; padding: 18px;
+              margin-bottom: 14px; background: #fafafa; }
+    .modelo h2 { margin: 0 0 6px 0; font-size: 18px; color: #1a3a6c; }
+    .modelo p { margin: 0 0 10px 0; color: #555; }
+    .modelo a { display: inline-block; padding: 8px 14px; background: #1a3a6c;
+                color: white; text-decoration: none; border-radius: 5px; }
+    .modelo a:hover { background: #14304f; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Contratos</h1>
+  <p>Selecciona el modelo de contrato que quieres generar:</p>
+
+  {% for id, modelo in modelos.items() %}
+    <div class="modelo">
+      <h2>{{ modelo.nombre }}</h2>
+      <p>{{ modelo.descripcion }}</p>
+      <a href="{{ url_for('formulario', modelo_id=id) }}">Crear contrato</a>
+    </div>
+  {% endfor %}
+</body>
+</html>

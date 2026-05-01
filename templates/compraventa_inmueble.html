@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ modelo.nombre }}</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 760px;
+           margin: 40px auto; padding: 0 20px; color: #222; }
+    h1 { color: #1a3a6c; }
+    h2 { color: #1a3a6c; border-bottom: 1px solid #ddd; padding-bottom: 6px;
+         margin-top: 28px; font-size: 17px; }
+    label { display: block; margin-top: 12px; font-weight: 600; font-size: 14px; }
+    input, textarea { width: 100%; padding: 8px; box-sizing: border-box;
+                      font-size: 14px; border: 1px solid #ccc; border-radius: 4px;
+                      font-family: inherit; }
+    textarea { min-height: 60px; }
+    .row { display: flex; gap: 12px; }
+    .row > div { flex: 1; }
+    button { margin-top: 24px; padding: 12px 24px; background: #1a3a6c; color: white;
+             border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+    button:hover { background: #14304f; }
+    a.volver { color: #1a3a6c; text-decoration: none; font-size: 14px; }
+    .nota { background: #fff8e1; border-left: 3px solid #ffb300; padding: 10px 14px;
+            font-size: 13px; color: #5d4a00; margin-top: 14px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <a class="volver" href="{{ url_for('index') }}">&larr; Volver</a>
+  <h1>{{ modelo.nombre }}</h1>
+  <p>Rellena los datos y pulsa <em>Generar contrato</em>. Se descargará un Word listo para revisar y firmar.</p>
+
+  <div class="nota">
+    Este es un modelo de partida. Revisa siempre el contrato generado antes de su firma y consulta a un profesional si tienes dudas legales.
+  </div>
+
+  <form method="POST" action="{{ url_for('generar', modelo_id=modelo_id) }}">
+
+    <h2>Lugar y fecha</h2>
+    <div class="row">
+      <div>
+        <label>Lugar de firma</label>
+        <input type="text" name="lugar_firma" placeholder="Madrid" required>
+      </div>
+      <div>
+        <label>Fecha de firma</label>
+        <input type="text" name="fecha_firma" placeholder="1 de mayo de 2026" required>
+      </div>
+    </div>
+
+    <h2>Parte vendedora</h2>
+    <label>Nombre completo</label>
+    <input type="text" name="vendedor_nombre" required>
+    <div class="row">
+      <div>
+        <label>DNI / NIE</label>
+        <input type="text" name="vendedor_dni" required>
+      </div>
+      <div>
+        <label>Domicilio</label>
+        <input type="text" name="vendedor_domicilio" required>
+      </div>
+    </div>
+
+    <h2>Parte compradora</h2>
+    <label>Nombre completo</label>
+    <input type="text" name="comprador_nombre" required>
+    <div class="row">
+      <div>
+        <label>DNI / NIE</label>
+        <input type="text" name="comprador_dni" required>
+      </div>
+      <div>
+        <label>Domicilio</label>
+        <input type="text" name="comprador_domicilio" required>
+      </div>
+    </div>
+
+    <h2>Datos del inmueble</h2>
+    <label>Descripción del inmueble</label>
+    <textarea name="inmueble_descripcion" placeholder="Vivienda de 90 m² con dos dormitorios..." required></textarea>
+    <label>Dirección completa</label>
+    <input type="text" name="inmueble_direccion" placeholder="Calle Mayor 1, 3º B, 28001 Madrid" required>
+
+    <h2>Registro de la Propiedad</h2>
+    <label>Registro de la Propiedad de</label>
+    <input type="text" name="registro_propiedad" placeholder="Madrid nº 5" required>
+    <div class="row">
+      <div>
+        <label>Tomo</label>
+        <input type="text" name="registro_tomo" required>
+      </div>
+      <div>
+        <label>Libro</label>
+        <input type="text" name="registro_libro" required>
+      </div>
+      <div>
+        <label>Folio</label>
+        <input type="text" name="registro_folio" required>
+      </div>
+      <div>
+        <label>Finca nº</label>
+        <input type="text" name="registro_finca" required>
+      </div>
+    </div>
+    <label>Referencia catastral</label>
+    <input type="text" name="referencia_catastral" required>
+
+    <h2>Precio y pago</h2>
+    <div class="row">
+      <div>
+        <label>Precio (en cifras)</label>
+        <input type="text" name="precio_compra_numero" placeholder="250.000" required>
+      </div>
+      <div>
+        <label>Precio (en letras)</label>
+        <input type="text" name="precio_compra_letras" placeholder="DOSCIENTOS CINCUENTA MIL EUROS" required>
+      </div>
+    </div>
+    <label>Forma de pago</label>
+    <textarea name="forma_pago" placeholder="transferencia bancaria a la cuenta nº..." required></textarea>
+
+    <h2>Entrega y jurisdicción</h2>
+    <div class="row">
+      <div>
+        <label>Fecha de entrega</label>
+        <input type="text" name="fecha_entrega" placeholder="15 de junio de 2026" required>
+      </div>
+      <div>
+        <label>Jurisdicción aplicable</label>
+        <input type="text" name="jurisdiccion" placeholder="Madrid" required>
+      </div>
+    </div>
+
+    <button type="submit">Generar contrato</button>
+  </form>
+</body>
+</html>
