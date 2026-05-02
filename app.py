@@ -38,17 +38,26 @@ MODELOS = {
             "forma_pago", "fecha_entrega", "jurisdiccion",
         ],
     },
-    # Ejemplo de cómo añadir un nuevo modelo en el futuro:
-    # "arrendamiento_vivienda": {
-    #     "nombre": "Arrendamiento de vivienda",
-    #     "descripcion": "Contrato de alquiler de vivienda habitual.",
-    #     "plantilla": "arrendamiento_vivienda.docx",
-    #     "formulario": "arrendamiento_vivienda.html",
-    #     "campos": ["arrendador_nombre", "arrendatario_nombre", ...],
-    # },
+    "nda_confidencialidad": {
+        "nombre": "Acuerdo de confidencialidad (NDA)",
+        "descripcion": "Acuerdo bilateral de confidencialidad entre dos partes (legislación española).",
+        "plantilla": "nda_confidencialidad.docx",
+        "formulario": "nda_confidencialidad.html",
+        "campos": [
+            "lugar_firma", "fecha_firma",
+            "parte_a_nombre", "parte_a_dni", "parte_a_domicilio", "parte_a_representante",
+            "parte_b_nombre", "parte_b_dni", "parte_b_domicilio", "parte_b_representante",
+            "objeto_relacion", "duracion_acuerdo", "plazo_confidencialidad",
+            "penalizacion", "jurisdiccion",
+        ],
+    },
 }
 
 CARPETA_MODELOS = os.path.join(os.path.dirname(__file__), "modelos")
+
+# Texto que aparecerá en el contrato cuando un campo se deje vacío.
+# Aplica a TODOS los modelos, presentes y futuros.
+PLACEHOLDER_VACIO = "[pendiente de completar]"
 
 
 @app.route("/")
@@ -73,7 +82,11 @@ def generar(modelo_id):
         abort(404)
 
     modelo = MODELOS[modelo_id]
-    datos = {campo: request.form.get(campo, "").strip() for campo in modelo["campos"]}
+    # Si un campo se deja vacío, se sustituye por "[pendiente de completar]"
+    datos = {
+        campo: (request.form.get(campo, "").strip() or PLACEHOLDER_VACIO)
+        for campo in modelo["campos"]
+    }
 
     # Cargar y rellenar la plantilla
     plantilla_path = os.path.join(CARPETA_MODELOS, modelo["plantilla"])

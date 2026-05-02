@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ modelo.nombre }}</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 760px;
+           margin: 40px auto; padding: 0 20px; color: #222; }
+    h1 { color: #1a3a6c; }
+    h2 { color: #1a3a6c; border-bottom: 1px solid #ddd; padding-bottom: 6px;
+         margin-top: 28px; font-size: 17px; }
+    label { display: block; margin-top: 12px; font-weight: 600; font-size: 14px; }
+    .opcional { color: #888; font-weight: normal; font-size: 12px; }
+    input, textarea { width: 100%; padding: 8px; box-sizing: border-box;
+                      font-size: 14px; border: 1px solid #ccc; border-radius: 4px;
+                      font-family: inherit; }
+    textarea { min-height: 60px; }
+    .row { display: flex; gap: 12px; }
+    .row > div { flex: 1; }
+    button { margin-top: 24px; padding: 12px 24px; background: #1a3a6c; color: white;
+             border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+    button:hover { background: #14304f; }
+    a.volver { color: #1a3a6c; text-decoration: none; font-size: 14px; }
+    .nota { background: #fff8e1; border-left: 3px solid #ffb300; padding: 10px 14px;
+            font-size: 13px; color: #5d4a00; margin-top: 14px; border-radius: 3px; }
+    .ayuda { color: #777; font-size: 12px; margin-top: 4px; }
+  </style>
+</head>
+<body>
+  <a class="volver" href="{{ url_for('index') }}">&larr; Volver</a>
+  <h1>{{ modelo.nombre }}</h1>
+  <p>Rellena los datos y pulsa <em>Generar contrato</em>. Se descargará un Word listo para revisar y firmar.</p>
+
+  <div class="nota">
+    Modelo bilateral (ambas partes se obligan a confidencialidad). Puedes dejar campos en blanco si aún no tienes el dato — en el contrato aparecerán como <strong>[pendiente de completar]</strong> para que los rellenes después en Word.
+    <br><br>
+    Revisa siempre el contrato generado antes de firmarlo y consulta a un profesional si tienes dudas.
+  </div>
+
+  <form method="POST" action="{{ url_for('generar', modelo_id=modelo_id) }}">
+
+    <h2>Lugar y fecha</h2>
+    <div class="row">
+      <div>
+        <label>Lugar de firma</label>
+        <input type="text" name="lugar_firma" placeholder="Madrid">
+      </div>
+      <div>
+        <label>Fecha de firma</label>
+        <input type="text" name="fecha_firma" placeholder="1 de mayo de 2026">
+      </div>
+    </div>
+
+    <h2>Parte A</h2>
+    <label>Nombre completo o razón social</label>
+    <input type="text" name="parte_a_nombre" placeholder="D. Juan García López   ó   ACME, S.L.">
+    <div class="row">
+      <div>
+        <label>DNI / NIE / CIF</label>
+        <input type="text" name="parte_a_dni">
+      </div>
+      <div>
+        <label>Domicilio</label>
+        <input type="text" name="parte_a_domicilio">
+      </div>
+    </div>
+    <label>Representante <span class="opcional">(solo si la Parte A es una empresa)</span></label>
+    <input type="text" name="parte_a_representante" placeholder=", representada por D. Juan Pérez, con DNI 12345678A, en su calidad de Administrador único">
+    <p class="ayuda">Déjalo vacío si la Parte A es una persona física. Si es una empresa, empieza el texto con una coma como en el ejemplo.</p>
+
+    <h2>Parte B</h2>
+    <label>Nombre completo o razón social</label>
+    <input type="text" name="parte_b_nombre">
+    <div class="row">
+      <div>
+        <label>DNI / NIE / CIF</label>
+        <input type="text" name="parte_b_dni">
+      </div>
+      <div>
+        <label>Domicilio</label>
+        <input type="text" name="parte_b_domicilio">
+      </div>
+    </div>
+    <label>Representante <span class="opcional">(solo si la Parte B es una empresa)</span></label>
+    <input type="text" name="parte_b_representante" placeholder=", representada por Dña. María Pérez, con DNI 87654321B, en su calidad de Consejera Delegada">
+
+    <h2>Objeto y duración</h2>
+    <label>Objeto / contexto de la relación</label>
+    <textarea name="objeto_relacion" placeholder="la negociación de una posible operación de compra de participaciones sociales / la prestación de servicios de consultoría / el desarrollo conjunto de un nuevo producto..."></textarea>
+    <p class="ayuda">Describe brevemente para qué se va a intercambiar la información confidencial.</p>
+
+    <div class="row">
+      <div>
+        <label>Duración del acuerdo</label>
+        <input type="text" name="duracion_acuerdo" placeholder="2 años / mientras dure la relación / indefinidamente">
+      </div>
+      <div>
+        <label>Plazo de confidencialidad (años tras finalizar)</label>
+        <input type="text" name="plazo_confidencialidad" placeholder="5">
+      </div>
+    </div>
+
+    <h2>Penalización y jurisdicción</h2>
+    <div class="row">
+      <div>
+        <label>Penalización mínima por incumplimiento (€)</label>
+        <input type="text" name="penalizacion" placeholder="10.000">
+      </div>
+      <div>
+        <label>Jurisdicción aplicable</label>
+        <input type="text" name="jurisdiccion" placeholder="Madrid">
+      </div>
+    </div>
+
+    <button type="submit">Generar contrato</button>
+  </form>
+</body>
+</html>
