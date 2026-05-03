@@ -14,9 +14,15 @@
     .modelo a { display: inline-block; padding: 8px 14px; background: #1a3a6c;
                 color: white; text-decoration: none; border-radius: 5px; }
     .modelo a:hover { background: #14304f; }
+    .topbar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
+    .topbar a { color: #1a3a6c; text-decoration: none; font-size: 13px; }
+    .topbar a:hover { text-decoration: underline; }
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+  </div>
   <h1>Generador de Contratos</h1>
   <p>Selecciona el modelo de contrato que quieres generar:</p>
 

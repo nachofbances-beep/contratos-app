@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso · Generador de Contratos</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; max-width: 420px;
+           margin: 80px auto; padding: 0 20px; color: #222; }
+    h1 { color: #1a3a6c; font-size: 22px; margin-bottom: 6px; }
+    p.intro { color: #555; margin-top: 0; margin-bottom: 24px; font-size: 14px; }
+    label { display: block; margin-top: 12px; font-weight: 600; font-size: 14px; }
+    input[type=password] { width: 100%; padding: 10px; box-sizing: border-box;
+                           font-size: 15px; border: 1px solid #ccc; border-radius: 4px; }
+    button { margin-top: 18px; width: 100%; padding: 12px; background: #1a3a6c;
+             color: white; border: none; border-radius: 5px; font-size: 15px; cursor: pointer; }
+    button:hover { background: #14304f; }
+    .error { background: #fdecea; border-left: 3px solid #d93025; padding: 10px 14px;
+             font-size: 13px; color: #8b1a1a; margin-bottom: 16px; border-radius: 3px; }
+  </style>
+</head>
+<body>
+  <h1>Generador de Contratos</h1>
+  <p class="intro">Introduce la contraseña de acceso para continuar.</p>
+
+  {% if error %}
+    <div class="error">Contraseña incorrecta. Inténtalo de nuevo.</div>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('login') }}">
+    <label>Contraseña</label>
+    <input type="password" name="password" autofocus required>
+    <button type="submit">Entrar</button>
+  </form>
+</body>
+</html>

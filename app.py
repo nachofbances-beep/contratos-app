@@ -6,13 +6,38 @@ Para añadir un nuevo modelo de contrato, solo hay que:
   3. Crear el formulario HTML en /templates/.
 """
 
-from flask import Flask, render_template, request, send_file, abort
+from flask import Flask, render_template, request, send_file, abort, session, redirect, url_for
 from docxtpl import DocxTemplate
 from io import BytesIO
-from datetime import datetime
+from datetime import datetime, timedelta
+from functools import wraps
 import os
 
 app = Flask(__name__)
+
+# -----------------------------------------------------------------------------
+# AUTENTICACIÓN (contraseña compartida)
+# -----------------------------------------------------------------------------
+# En Render se configuran SECRET_KEY y APP_PASSWORD como variables de entorno
+# (Settings → Environment). En local se usan los valores por defecto, así
+# puedes probar la app sin tener que configurar nada.
+# -----------------------------------------------------------------------------
+app.secret_key = os.environ.get("SECRET_KEY", "dev-only-key-change-in-production")
+APP_PASSWORD = os.environ.get("APP_PASSWORD", "dev")
+
+# La sesión dura 7 días (luego pide login otra vez).
+app.permanent_session_lifetime = timedelta(days=7)
+
+
+def login_required(f):
+    """Decorador: si no hay sesión activa, redirige a /login."""
+    @wraps(f)
+    def wrapper(*args, **kwargs):
+        if not session.get("logged_in"):
+            return redirect(url_for("login"))
+        return f(*args, **kwargs)
+    return wrapper
+
 
 # -----------------------------------------------------------------------------
 # CONFIGURACIÓN DE MODELOS DE CONTRATO
@@ -60,13 +85,34 @@ CARPETA_MODELOS = os.path.join(os.path.dirname(__file__), "modelos")
 PLACEHOLDER_VACIO = "[pendiente de completar]"
 
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Pantalla de login con contraseña compartida."""
+    if request.method == "POST":
+        if request.form.get("password") == APP_PASSWORD:
+            session["logged_in"] = True
+            session.permanent = True
+            return redirect(url_for("index"))
+        return render_template("login.html", error=True)
+    return render_template("login.html", error=False)
+
+
+@app.route("/logout")
+def logout():
+    """Cierra la sesión y vuelve al login."""
+    session.clear()
+    return redirect(url_for("login"))
+
+
 @app.route("/")
+@login_required
 def index():
     """Página principal: muestra la lista de modelos disponibles."""
     return render_template("index.html", modelos=MODELOS)
 
 
 @app.route("/contrato/<modelo_id>")
+@login_required
 def formulario(modelo_id):
     """Muestra el formulario de un modelo concreto."""
     if modelo_id not in MODELOS:
@@ -76,6 +122,7 @@ def formulario(modelo_id):
 
 
 @app.route("/generar/<modelo_id>", methods=["POST"])
+@login_required
 def generar(modelo_id):
     """Toma los datos del formulario, rellena la plantilla y devuelve el .docx."""
     if modelo_id not in MODELOS:
