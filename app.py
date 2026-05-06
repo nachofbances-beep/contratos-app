@@ -76,6 +76,21 @@ MODELOS = {
             "penalizacion", "jurisdiccion",
         ],
     },
+    "prestacion_servicios": {
+        "nombre": "Prestación de servicios profesionales (autónomo)",
+        "descripcion": "Contrato mercantil de prestación de servicios profesionales para freelance / autónomos (legislación española).",
+        "plantilla": "prestacion_servicios.docx",
+        "formulario": "prestacion_servicios.html",
+        "campos": [
+            "lugar_firma", "fecha_firma",
+            "prestador_nombre", "prestador_dni", "prestador_domicilio", "prestador_actividad",
+            "cliente_nombre", "cliente_dni", "cliente_domicilio", "cliente_representante",
+            "objeto_servicios", "entregables",
+            "fecha_inicio", "fecha_fin",
+            "precio_total_numero", "precio_total_letras", "iva_tipo", "forma_pago",
+            "plazo_confidencialidad", "preaviso_resolucion", "jurisdiccion",
+        ],
+    },
 }
 
 CARPETA_MODELOS = os.path.join(os.path.dirname(__file__), "modelos")

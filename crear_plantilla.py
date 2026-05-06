@@ -357,7 +357,187 @@ def crear_nda_confidencialidad(ruta_destino):
     print(f"Plantilla creada en: {ruta_destino}")
 
 
+def crear_prestacion_servicios(ruta_destino):
+    doc = Document()
+
+    for section in doc.sections:
+        section.top_margin = Cm(2.5)
+        section.bottom_margin = Cm(2.5)
+        section.left_margin = Cm(2.5)
+        section.right_margin = Cm(2.5)
+
+    style = doc.styles["Normal"]
+    style.font.name = "Calibri"
+    style.font.size = Pt(11)
+
+    add_titulo(doc, "CONTRATO DE PRESTACIÓN DE SERVICIOS PROFESIONALES")
+    doc.add_paragraph()
+
+    doc.add_paragraph("En {{ lugar_firma }}, a {{ fecha_firma }}.")
+    doc.add_paragraph()
+
+    add_seccion(doc, "REUNIDOS")
+    doc.add_paragraph()
+
+    p = doc.add_paragraph()
+    p.add_run("DE UNA PARTE, como ")
+    p.add_run("PRESTADOR/A DE SERVICIOS").bold = True
+    p.add_run(' (en adelante, el "PRESTADOR"):')
+    doc.add_paragraph(
+        "D./Dña. {{ prestador_nombre }}, mayor de edad, con NIF nº "
+        "{{ prestador_dni }}, y domicilio fiscal en {{ prestador_domicilio }}, "
+        "dado/a de alta como trabajador/a autónomo/a en la actividad de "
+        "{{ prestador_actividad }}."
+    )
+    doc.add_paragraph()
+
+    p = doc.add_paragraph()
+    p.add_run("DE OTRA PARTE, como ")
+    p.add_run("CLIENTE").bold = True
+    p.add_run(' (en adelante, el "CLIENTE"):')
+    doc.add_paragraph(
+        "{{ cliente_nombre }}, con DNI/NIE/CIF nº {{ cliente_dni }} y "
+        "domicilio en {{ cliente_domicilio }}{{ cliente_representante }}."
+    )
+    doc.add_paragraph()
+
+    doc.add_paragraph(
+        "Ambas partes se reconocen mutuamente capacidad legal suficiente "
+        "para el otorgamiento del presente contrato y, a tal efecto,"
+    )
+    doc.add_paragraph()
+
+    add_seccion(doc, "EXPONEN")
+    doc.add_paragraph()
+
+    doc.add_paragraph(
+        "I.- Que el PRESTADOR es un/a profesional independiente, dado/a de "
+        "alta en el Régimen Especial de Trabajadores Autónomos (RETA), que "
+        "presta servicios profesionales de su especialidad en condiciones "
+        "de plena autonomía técnica, organizativa y económica."
+    )
+    doc.add_paragraph(
+        "II.- Que el CLIENTE está interesado/a en contratar al PRESTADOR "
+        "para la realización de los servicios profesionales que se "
+        "describen a continuación."
+    )
+    doc.add_paragraph(
+        "III.- Que ambas partes acuerdan suscribir el presente contrato de "
+        "prestación de servicios profesionales conforme a las siguientes"
+    )
+    doc.add_paragraph()
+
+    add_seccion(doc, "CLÁUSULAS")
+    doc.add_paragraph()
+
+    add_clausula(
+        doc,
+        "PRIMERA.- OBJETO.",
+        "El PRESTADOR se compromete a prestar al CLIENTE los siguientes "
+        "servicios profesionales: {{ objeto_servicios }}. Como resultado de "
+        "dichos servicios, el PRESTADOR entregará al CLIENTE: "
+        "{{ entregables }}.",
+    )
+    add_clausula(
+        doc,
+        "SEGUNDA.- NATURALEZA MERCANTIL.",
+        "El presente contrato tiene carácter exclusivamente mercantil y se "
+        "rige por la libertad de pactos prevista en el artículo 1255 del "
+        "Código Civil. En ningún caso podrá entenderse que existe relación "
+        "laboral entre las partes, no quedando el PRESTADOR sujeto al "
+        "ámbito de aplicación del Estatuto de los Trabajadores. El "
+        "PRESTADOR ejecuta los servicios con plena autonomía organizativa, "
+        "asumiendo el riesgo y ventura de su actividad, y aportando los "
+        "medios materiales y técnicos necesarios para su prestación.",
+    )
+    add_clausula(
+        doc,
+        "TERCERA.- DURACIÓN.",
+        "El presente contrato entrará en vigor el día {{ fecha_inicio }} y "
+        "se mantendrá vigente hasta {{ fecha_fin }}, sin perjuicio de las "
+        "causas de resolución previstas en la cláusula séptima.",
+    )
+    add_clausula(
+        doc,
+        "CUARTA.- HONORARIOS Y FORMA DE PAGO.",
+        "Como contraprestación por los servicios objeto del presente "
+        "contrato, el CLIENTE abonará al PRESTADOR la cantidad de "
+        "{{ precio_total_numero }} euros ({{ precio_total_letras }}), más "
+        "el IVA correspondiente al tipo del {{ iva_tipo }}. El PRESTADOR "
+        "emitirá la correspondiente factura conforme a la normativa fiscal "
+        "aplicable. El pago se efectuará mediante {{ forma_pago }}. En caso "
+        "de impago, el CLIENTE se compromete al abono de los intereses de "
+        "demora previstos en la Ley 3/2004, de 29 de diciembre, por la que "
+        "se establecen medidas de lucha contra la morosidad en las "
+        "operaciones comerciales.",
+    )
+    add_clausula(
+        doc,
+        "QUINTA.- CONFIDENCIALIDAD.",
+        "Ambas partes se obligan a mantener la más estricta confidencialidad "
+        "sobre toda la información a la que tengan acceso con motivo del "
+        "presente contrato, así como sobre el contenido del propio contrato. "
+        "Esta obligación subsistirá durante {{ plazo_confidencialidad }} "
+        "años desde la finalización del mismo, con independencia del motivo "
+        "de su terminación.",
+    )
+    add_clausula(
+        doc,
+        "SEXTA.- PROPIEDAD INTELECTUAL.",
+        "Una vez abonados íntegramente los honorarios pactados, los "
+        "derechos de explotación sobre los entregables generados "
+        "específicamente para el CLIENTE en el marco del presente contrato "
+        "quedarán cedidos en exclusiva al CLIENTE para todo el territorio "
+        "mundial y por el plazo máximo permitido por la legislación "
+        "aplicable. Quedan excluidos de la cesión los conocimientos "
+        "previos, herramientas, metodologías y know-how propios del "
+        "PRESTADOR, así como los derechos morales del autor, irrenunciables "
+        "conforme al artículo 14 del Real Decreto Legislativo 1/1996.",
+    )
+    add_clausula(
+        doc,
+        "SÉPTIMA.- RESOLUCIÓN.",
+        "Cualquiera de las partes podrá resolver el presente contrato "
+        "mediante comunicación escrita a la otra parte con un preaviso de "
+        "{{ preaviso_resolucion }} días naturales. Asimismo, será causa de "
+        "resolución automática el incumplimiento grave de las obligaciones "
+        "aquí asumidas, sin perjuicio del derecho a reclamar los daños y "
+        "perjuicios causados. En caso de resolución anticipada, el "
+        "PRESTADOR tendrá derecho a percibir los honorarios "
+        "correspondientes al trabajo efectivamente realizado hasta la "
+        "fecha de resolución.",
+    )
+    add_clausula(
+        doc,
+        "OCTAVA.- LEY APLICABLE Y JURISDICCIÓN.",
+        "El presente contrato se rige por la legislación española. Para "
+        "cualquier controversia derivada del mismo, las partes se someten "
+        "expresamente a los Juzgados y Tribunales de {{ jurisdiccion }}, "
+        "con renuncia a su propio fuero si lo tuvieren.",
+    )
+    doc.add_paragraph()
+
+    doc.add_paragraph(
+        "Y en prueba de conformidad con cuanto antecede, firman ambas "
+        "partes el presente contrato por duplicado y a un solo efecto, en "
+        "el lugar y fecha indicados al inicio."
+    )
+    doc.add_paragraph()
+    doc.add_paragraph()
+
+    doc.add_paragraph("EL PRESTADOR\t\t\t\t\tEL CLIENTE")
+    doc.add_paragraph()
+    doc.add_paragraph()
+    doc.add_paragraph("_____________________\t\t\t_____________________")
+    doc.add_paragraph("{{ prestador_nombre }}\t\t\t{{ cliente_nombre }}")
+
+    os.makedirs(os.path.dirname(ruta_destino), exist_ok=True)
+    doc.save(ruta_destino)
+    print(f"Plantilla creada en: {ruta_destino}")
+
+
 if __name__ == "__main__":
     base = os.path.dirname(__file__)
     crear_compraventa_inmueble(os.path.join(base, "modelos", "compraventa_inmueble.docx"))
     crear_nda_confidencialidad(os.path.join(base, "modelos", "nda_confidencialidad.docx"))
+    crear_prestacion_servicios(os.path.join(base, "modelos", "prestacion_servicios.docx"))
